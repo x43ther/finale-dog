@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Lone Inu</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  color: white;
+}
+
+.room {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* HEADER */
+.header {
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  text-align: center;
+  z-index: 6;
+}
+
+.meme {
+  font-size: 52px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 0 30px black;
+  margin-bottom: 25px;
+}
+
+/* PREMIUM COPY BOX */
+.copy-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  font-size: 14px;
+  background: linear-gradient(145deg, #111, #1a1a1a);
+  border: 1px solid #333;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  box-shadow:
+    0 0 0 rgba(255,255,255,0),
+    inset 0 0 10px rgba(255,255,255,0.03);
+}
+
+.copy-text:hover {
+  border-color: #666;
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.6),
+    inset 0 0 15px rgba(255,255,255,0.05);
+}
+
+.copy-icon {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  border: 1px solid #333;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.copy-text.show .tooltip {
+  opacity: 1;
+}
+
+/* DARK ROOM */
+.darkness {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.95;
+  transition: opacity 0.8s ease;
+  z-index: 1;
+}
+
+/* CEILING BEAM */
+.beam {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 85%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,220,0.9),
+    rgba(255,255,220,0.6),
+    rgba(255,255,220,0.2),
+    transparent
+  );
+  clip-path: polygon(49% 0%, 51% 0%, 100% 100%, 0% 100%);
+  filter: blur(40px);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 2;
+}
+
+/* FLOOR GLOW */
+.floor-glow {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 200px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255,255,220,0.8),
+    rgba(255,255,220,0.4),
+    transparent
+  );
+  filter: blur(50px);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 3;
+}
+
+/* DOG */
+.dog {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 4;
+}
+
+/* BUTTON */
+.switch {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000);
+  border: 4px solid #300;
+  box-shadow:
+    0 0 20px rgba(255,0,0,0.5),
+    inset 0 -8px 15px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 6;
+}
+
+/* GREEN ON */
+.on .beam,
+.on .floor-glow {
+  opacity: 1;
+}
+
+.on .darkness {
+  opacity: 0.5;
+}
+
+.on .dog {
+  opacity: 1;
+}
+
+.on .switch {
+  background: radial-gradient(circle at 30% 30%, #5cff5c, #008000);
+  border: 4px solid #003300;
+  box-shadow:
+    0 0 30px rgba(0,255,0,0.6),
+    inset 0 -8px 15px rgba(0,0,0,0.5);
+}
+
+/* MEME ARROW */
+.button-wrapper {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 7;
+}
+
+/* BUTTON stays same */
+.switch {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000);
+  border: 4px solid #300;
+  box-shadow:
+    0 0 20px rgba(255,0,0,0.5),
+    inset 0 -8px 15px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ARROW */
+.arrow {
+  margin-bottom: 130px;
+  font-size: 26px;
+  font-weight: 900;
+  transform: rotate(-8deg);
+  animation: wiggle 1.2s infinite;
+  text-align: center;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.arrow-icon {
+  display: block;
+  font-size: 50px;
+  transform: rotate(90deg);
+}
+
+/* Wiggle */
+@keyframes wiggle {
+  0% { transform: rotate(-8deg) translateY(0); }
+  50% { transform: rotate(-4deg) translateY(-6px); }
+  100% { transform: rotate(-8deg) translateY(0); }
+}
+
+.on .arrow {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="room" id="room">
+
+  <div class="header">
+    <div class="meme">LONE INU</div>
+
+    <div class="copy-text" id="copyBox" onclick="copyText()">
+      <span>CA</span>
+      <span class="copy-icon">📋</span>
+      <div class="tooltip">Copied ✓</div>
+    </div>
+  </div>
+
+  <div class="darkness"></div>
+  <div class="beam"></div>
+  <div class="floor-glow"></div>
+
+  <img src="dog.jpg" class="dog">
+
+ <div class="button-wrapper">
+  <div class="arrow">
+    PRESS HERE
+    <span class="arrow-icon">➜</span>
+  </div>
+
+  <div class="switch" onclick="toggleLight()"></div>
+</div>
+
+</div>
+
+<script>
+function toggleLight() {
+  document.getElementById("room").classList.toggle("on");
+}
+
+function copyText() {
+  const text = "0xDOGE1234ABCD";
+  const box = document.getElementById("copyBox");
+
+  navigator.clipboard.writeText(text);
+  box.classList.add("show");
+
+  setTimeout(() => {
+    box.classList.remove("show");
+  }, 1200);
+}
+</script>
+
+</body>
+</html>
